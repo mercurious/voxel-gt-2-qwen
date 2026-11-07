@@ -1,0 +1,105 @@
+/* Voxel Touring GT — presentation */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { height: 100%; overflow: hidden; background: #0b0d10; }
+body { font: 14px/1.45 "Segoe UI", system-ui, sans-serif; color: #e8ecf1; }
+
+#gl { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
+
+.hidden { display: none !important; }
+
+/* ---------- HUD ---------- */
+#hud { position: fixed; inset: 0; pointer-events: none; }
+#timePanel {
+  position: absolute; top: 18px; left: 18px; padding: 10px 14px;
+  background: rgba(10, 12, 16, 0.72); border-left: 3px solid #c8102e;
+  min-width: 220px;
+}
+#timePanel .row { display: flex; justify-content: space-between; gap: 18px; }
+#timePanel span { color: #8b94a2; letter-spacing: 1px; font-size: 11px; }
+#timePanel b { font-variant-numeric: tabular-nums; font-weight: 600; }
+#lapNo { margin-top: 6px; color: #c8102e; font-weight: 700; letter-spacing: 2px; font-size: 12px; }
+#posTxt {
+  position: absolute; top: 18px; left: 50%; transform: translateX(-50%);
+  font-size: 26px; font-weight: 800; letter-spacing: 2px;
+  background: rgba(10, 12, 16, 0.6); padding: 4px 18px; border-radius: 4px;
+}
+#map {
+  position: absolute; top: 14px; right: 14px; width: 210px; height: 210px;
+  background: rgba(10, 12, 16, 0.55); border-radius: 6px;
+}
+#spdPanel {
+  position: absolute; right: 26px; bottom: 22px; text-align: right; line-height: 1;
+}
+#spdPanel b { font-size: 64px; font-weight: 800; font-variant-numeric: tabular-nums; }
+#spdPanel span { display: block; color: #8b94a2; letter-spacing: 4px; font-size: 11px; }
+#warn {
+  position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
+  color: #ffb300; font-weight: 800; letter-spacing: 3px; opacity: 0; transition: opacity .2s;
+}
+#warn.show { opacity: 1; }
+#help {
+  position: absolute; bottom: 8px; left: 14px; color: #5d6673; font-size: 11px; letter-spacing: 1px;
+}
+#count {
+  position: absolute; top: 38%; left: 50%; transform: translate(-50%, -50%);
+  font-size: 120px; font-weight: 800; color: #fff; text-shadow: 0 4px 30px rgba(200, 16, 46, .8);
+}
+
+/* ---------- menu ---------- */
+#menu {
+  position: fixed; inset: 0; padding: 34px clamp(20px, 6vw, 90px);
+  overflow-y: auto; background:
+    radial-gradient(1200px 500px at 75% -10%, rgba(200, 16, 46, 0.14), transparent 60%),
+    linear-gradient(180deg, #101318 0%, #0b0d10 60%);
+}
+#menu h1 { font-size: 34px; letter-spacing: 6px; font-weight: 800; }
+#menu h1 em { color: #c8102e; font-style: normal; }
+#menu .tag { color: #8b94a2; letter-spacing: 2px; margin-bottom: 26px; font-size: 12px; }
+#menu h3 { margin: 18px 0 8px; color: #c8102e; font-size: 12px; letter-spacing: 4px; }
+.cards { display: flex; flex-wrap: wrap; gap: 12px; }
+.card {
+  border: 1px solid #262b33; border-radius: 6px; padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.03); cursor: pointer; min-width: 220px;
+  transition: border-color .15s, background .15s; position: relative;
+}
+.card:hover { border-color: #4a5462; }
+.card.sel { border-color: #c8102e; background: rgba(200, 16, 46, 0.10); }
+.card .cname { font-weight: 700; margin-bottom: 2px; }
+.card .csub { color: #8b94a2; font-size: 12px; }
+.card .cmeta { color: #5d6673; font-size: 11px; margin-top: 6px; font-variant-numeric: tabular-nums; }
+.card.car { width: 240px; }
+.card .chip { width: 100%; height: 6px; border-radius: 3px; margin-bottom: 8px; }
+.bar { display: flex; align-items: center; gap: 6px; margin-top: 4px; }
+.bar span { color: #5d6673; font-size: 10px; width: 38px; letter-spacing: 1px; }
+.bar i { display: block; height: 4px; background: #c8102e; border-radius: 2px; }
+#modeRow { display: flex; gap: 10px; }
+#modeRow button, #startBtn, .btnrow button {
+  border: 1px solid #2c333d; background: rgba(255, 255, 255, 0.04); color: #e8ecf1;
+  padding: 9px 20px; border-radius: 5px; cursor: pointer; letter-spacing: 2px;
+  font: 700 13px/1 inherit; pointer-events: auto;
+}
+#modeRow button.sel { border-color: #c8102e; background: rgba(200, 16, 46, 0.18); }
+#bestLine { margin: 16px 0; color: #aeb6c2; font-variant-numeric: tabular-nums; }
+#startBtn {
+  margin-top: 6px; background: #c8102e; border-color: #c8102e;
+  font-size: 16px; padding: 13px 34px;
+}
+#startBtn:hover { background: #e01437; }
+#menu .foot { margin-top: 22px; color: #5d6673; font-size: 11px; letter-spacing: 1px; }
+
+/* ---------- pause / results overlays ---------- */
+#pause, #results {
+  position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
+  background: rgba(6, 8, 10, 0.72); z-index: 5;
+}
+#results { background: rgba(6, 8, 10, 0.82); }
+#pause .box, #results {
+  padding: 26px 34px; border: 1px solid #262b33; border-radius: 8px;
+}
+#results { flex-direction: column; gap: 6px; min-width: 360px; }
+#results h2, #pause h2 { letter-spacing: 4px; margin-bottom: 8px; color: #c8102e; }
+.laprow { display: flex; justify-content: space-between; gap: 40px; font-variant-numeric: tabular-nums; }
+.laprow span { color: #8b94a2; }
+.bigstat { margin-top: 14px; font-size: 20px; font-weight: 800; letter-spacing: 2px; }
+.btnrow { margin-top: 16px; display: flex; gap: 10px; }
+#results .csub { color: #8b94a2; }

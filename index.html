@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>VOXEL TOURING GT</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<canvas id="gl"></canvas>
+
+<!-- in-race HUD -->
+<div id="hud" class="hidden">
+  <div id="timePanel">
+    <div class="row"><span>CUR</span><b id="lapNow">--:--.---</b></div>
+    <div class="row"><span>BEST</span><b id="lapBest">--:--.---</b></div>
+    <div class="row"><span>LAST</span><b id="lapLast">--:--.---</b></div>
+    <div id="lapNo">LAP 1</div>
+  </div>
+  <div id="posTxt"></div>
+  <canvas id="map" width="210" height="210"></canvas>
+  <div id="spdPanel"><b id="spd">0</b><span>KM/H</span></div>
+  <div id="warn">OFF TRACK</div>
+  <div id="help">W/↑ throttle &nbsp; S/↓ brake &nbsp; A/D steer &nbsp; SPACE handbrake &nbsp; R respawn &nbsp; M mute &nbsp; ESC pause</div>
+  <div id="count"></div>
+</div>
+
+<!-- garage / selection -->
+<div id="menu">
+  <h1>VOXEL&nbsp;TOURING&nbsp;<em>GT</em></h1>
+  <div class="tag">five cars · three circuits · one line</div>
+  <h3>CIRCUIT</h3>
+  <div id="trackCards" class="cards"></div>
+  <h3>MACHINE</h3>
+  <div id="carCards" class="cards"></div>
+  <h3>SESSION</h3>
+  <div id="modeRow">
+    <button data-mode="practice">PRACTICE</button>
+    <button data-mode="attack">3-LAP ATTACK</button>
+  </div>
+  <div id="bestLine"></div>
+  <button id="startBtn">► HOT LAP</button>
+  <div class="foot">W/↑ throttle · S/↓ brake · A/D steer · SPACE handbrake · R respawn · M mute · ESC pause</div>
+</div>
+
+<!-- pause overlay -->
+<div id="pause" class="hidden">
+  <div class="box">
+    <h2>PAUSED</h2>
+    <div class="csub">ESC to resume</div>
+    <div class="btnrow"><button id="qMenuBtn">RETURN TO GARAGE</button></div>
+  </div>
+</div>
+
+<!-- run results -->
+<div id="results" class="hidden"></div>
+
+<script src="js/util.js"></script>
+<script src="js/tracks.js"></script>
+<script src="js/cars.js"></script>
+<script src="js/physics.js"></script>
+<script src="js/ai.js"></script>
+<script src="js/webgl.js"></script>
+<script src="js/world.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/game.js"></script>
+</body>
+</html>
